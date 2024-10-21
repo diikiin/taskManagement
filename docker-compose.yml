@@ -1,0 +1,38 @@
+services:
+
+  postgres:
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_DB: task
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - task_network
+
+  django:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      DB_NAME: task
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    networks:
+      - task_network
+
+volumes:
+  postgres_data:
+
+networks:
+  task_network:
+    driver: bridge
