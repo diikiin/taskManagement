@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Detail</title>
+</head>
+
+<body>
+<h1>{{ task.title }}</h1>
+<p>{{ task.description }}</p>
+<p>Status: {% if task.is_done %} Done
+            {% else %} In progress
+            {% endif %}</p>
+
+{% if not task.is_done %}
+  <form action="{% url 'task_done' task.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Done</button>
+  </form>
+{% else %}
+  <p>This task is already done.</p>
+{% endif %}
+<br>
+
+<a href="{% url 'task_list' %}">Back to Task List</a>
+
+
+</body>
+</html>
